@@ -8,7 +8,8 @@
 :root{--main:#4da3ff;--dark:color-mix(in srgb,var(--main) 52%,#000);--soft:color-mix(in srgb,var(--main) 16%,#fff)}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{font-size:clamp(17px,2.1vw,23px)}
-html,body{margin:0}
+html,body{margin:0;overscroll-behavior:none}
+html,body{overscroll-behavior-y:none}
 body{min-height:100vh;min-height:100dvh;background:var(--main);font-family:"Trebuchet MS","Comic Sans MS",Verdana,sans-serif;color:#222;transition:background .4s;touch-action:manipulation;-webkit-user-select:none;user-select:none}
 input{-webkit-user-select:text;user-select:text}
 #bar{position:sticky;top:0;height:12px;background:rgba(255,255,255,.45);z-index:5}
@@ -68,6 +69,7 @@ label{font-weight:700;font-size:1.15rem}
 .note p{margin:.3em 0;font-size:1.3rem}
 .conf{position:fixed;top:-40px;font-size:2.2rem;pointer-events:none;animation:fall linear forwards;z-index:9}
 @keyframes fall{to{transform:translateY(110vh) rotate(360deg)}}
+.field,.tree{touch-action:none}
 .field{position:relative;height:min(56vh,430px);min-height:300px;background:linear-gradient(#bfe6ff 0 62%,#9ad37a 62%);border-radius:24px;overflow:hidden;border:4px solid var(--soft)}
 .an{position:absolute;width:84px;height:84px;font-size:3.4rem;line-height:1;background:transparent;border:0;cursor:pointer;padding:0;animation:pop .3s ease;transition:left .35s,top .35s}
 .an.hop{animation:hop .4s}
@@ -426,17 +428,24 @@ function finalScreen() {
   <div class="note"><p>✏️ <b>Show your notebook to your teacher.</b></p><p class="es" style="font-size:1.2rem">Mostrale tu cuaderno a tu docente.</p></div>
   <button class="btn alt" id="again">Play again 🔄</button></div>`);
   confetti(["🎉", "⭐", "🐰", "🐒", "🐘", "🍎", "🌈"], 45);
-  $("#again").onclick = () => { S.sc = {}; run(); };
+  $("#again").onclick = () => { S.sc = {}; run(false); };
 }
 
 /* ---------- secuencia ---------- */
-function run() {
+const KEY = "englishFunTime.progress";
+function saveProgress(i) { try { sessionStorage.setItem(KEY, JSON.stringify({ i, name: S.name, color: S.color, sc: S.sc })); } catch (e) {} }
+function clearProgress() { try { sessionStorage.removeItem(KEY); } catch (e) {} }
+function loadProgress() { try { return JSON.parse(sessionStorage.getItem(KEY)); } catch (e) { return null; } }
+function run(resume) {
   const steps = [welcome, colorScreen, startScreen, act1, game1, notice("Activity 1", "a1"), act2, game2, notice("Activity 2", "a2"), act3, game3, notice("Activity 3", "a3"), act4, notice("Activity 4", "a4"), finalScreen];
   let i = 0;
-  const go = () => { $("#barfill").style.width = (i / (steps.length - 1) * 100) + "%"; const f = steps[i++]; f(go); };
+  const saved = resume ? loadProgress() : null;
+  if (saved && saved.name && saved.i >= 1 && saved.i < steps.length) { S.name = saved.name; S.sc = saved.sc || {}; applyColor(saved.color || S.color); i = saved.i; }
+  else clearProgress();
+  const go = () => { $("#barfill").style.width = (i / (steps.length - 1) * 100) + "%"; saveProgress(i); const f = steps[i++]; f(go); };
   go();
 }
-run();
+run(true);
 </script>
 </body>
 </html>

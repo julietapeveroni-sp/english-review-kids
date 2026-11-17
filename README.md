@@ -14,7 +14,8 @@ Funciona en el navegador (pensada para **tablet**, también anda en computadora 
 Después de cada actividad (y su minijuego) aparece un **aviso en inglés y en español** para que anoten la nota en el cuaderno de inglés.
 
 ## Privacidad
-La página no guarda ni envía ningún dato. El nombre solo se muestra en pantalla mientras el alumno juega.
+La página no envía ningún dato. El nombre solo se muestra en pantalla mientras el alumno juega.
+Para que no se pierda el avance si la página se recarga sin querer, guarda el progreso (nombre, color y notas) en la memoria temporal de esa pestaña del navegador (`sessionStorage`). Se borra solo al cerrar la pestaña, no sale del dispositivo y no se comparte.
 No usa servicios externos, cookies ni anuncios.
 El botón 🔊 usa la voz que ya trae el dispositivo para leer la palabra en inglés.
 
@@ -23,6 +24,9 @@ El botón 🔊 usa la voz que ya trae el dispositivo para leer la palabra en ing
 - La nota de cada actividad es la cantidad de respuestas correctas a la primera (por ejemplo `5/6`).
 - En la Activity 4 se acepta *rabbit* o *bunny*, mayúsculas o minúsculas, y con "a/an/the" adelante.
 - Los botones y las zonas de toque son grandes para dedos pequeños. Funciona en tablet vertical y horizontal.
+
+## Pantallas táctiles
+La página bloquea el gesto de "deslizar hacia abajo para recargar" (`overscroll-behavior`) y los minijuegos no scrollean al arrastrar el dedo. Si igual se recarga, el alumno vuelve a la misma actividad con sus notas.
 
 ## Cómo editarla
 Todo está en un solo archivo, `index.html`. Para cambiar palabras, preguntas o animales se edita ese archivo:
