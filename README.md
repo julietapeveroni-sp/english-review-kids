@@ -9,7 +9,8 @@ Funciona en el navegador (pensada para **tablet**, también anda en computadora 
 3. **Activity 2: HOW DOES SHE/HE FEEL?** *True or false* de emociones ("She feels happy."): sleepy, hungry, nervous, angry, happy, excited, thirsty, sad. → *Mini-game 2: EMOTIONS:* ahorcado con emociones (la cara funciona de pista).
 4. **Activity 3:** preguntas con *can / can't* y animales ("Can the elephant fly?"): sleep, fly, swim, run, crawl, climb. → *Mini-game 3:* "Tap on the monkey": 10 toques para que el mono suba al árbol.
 5. **Activity 4 (Choose and write):** ven el dibujo de un animal o una comida, **eligen la palabra en un multiple choice** (3 opciones) y después **la escriben ellos**, con la palabra a la vista para copiarla. Si hay un error de ortografía, la página avisa y marca en rojo las letras que faltan o sobran. Tiene hasta 3 intentos por palabra.
-6. **Final:** resumen de notas y felicitaciones.
+6. **Activity 5 (Match the sentences):** unir 7 oraciones con su final ("The monkey can ... climb a tree", "The apple is ... red", "The boy feels ... happy"…). Al acertar, la oración completa se lee en voz alta.
+7. **Final:** resumen de notas y felicitaciones.
 
 Después de cada actividad (y su minijuego) aparece un **aviso en inglés y en español** para que anoten la nota en el cuaderno de inglés.
 
@@ -25,6 +26,9 @@ El botón 🔊 usa la voz que ya trae el dispositivo para leer la palabra en ing
 - En la Activity 4 el multiple choice es una ayuda: la nota cuenta las palabras escritas bien a la primera. Las opciones incorrectas son otras palabras de la misma categoría (animales o comidas).
 - En la Activity 4 se acepta *rabbit* o *bunny*, mayúsculas o minúsculas, y con "a/an/the" adelante.
 - Los botones y las zonas de toque son grandes para dedos pequeños. Funciona en tablet vertical y horizontal.
+
+## Texto en mayúsculas
+Todo el texto de la página se muestra en MAYÚSCULAS (con CSS, `text-transform`). Lo que escriben los alumnos se puede teclear en minúsculas o mayúsculas.
 
 ## Pantallas táctiles
 La página bloquea el gesto de "deslizar hacia abajo para recargar" (`overscroll-behavior`) y los minijuegos no scrollean al arrastrar el dedo. Si igual se recarga, el alumno vuelve a la misma actividad con sus notas.

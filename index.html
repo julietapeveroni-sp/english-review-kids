@@ -10,7 +10,8 @@
 html{font-size:clamp(17px,2.1vw,23px)}
 html,body{margin:0;overscroll-behavior:none}
 html,body{overscroll-behavior-y:none}
-body{min-height:100vh;min-height:100dvh;background:var(--main);font-family:"Trebuchet MS","Comic Sans MS",Verdana,sans-serif;color:#222;transition:background .4s;touch-action:manipulation;-webkit-user-select:none;user-select:none}
+body{min-height:100vh;min-height:100dvh;background:var(--main);font-family:"Trebuchet MS","Comic Sans MS",Verdana,sans-serif;color:#222;transition:background .4s;touch-action:manipulation;-webkit-user-select:none;user-select:none;text-transform:uppercase}
+button,input{text-transform:inherit}
 input{-webkit-user-select:text;user-select:text}
 #bar{position:sticky;top:0;height:12px;background:rgba(255,255,255,.45);z-index:5}
 #barfill{display:block;height:100%;width:0;background:var(--dark);transition:width .4s}
@@ -53,6 +54,9 @@ label{font-weight:700;font-size:1.15rem}
 .choice{display:block;width:min(100%,440px);margin:10px auto;font-size:1.9rem;min-height:70px}
 .choice.right{background:#c8f7c5;color:#222;border-color:#2e9e3e;opacity:1}
 .choice.wrong{background:#ffd3d3;color:#222;border-color:#d33;opacity:1}
+.match.wide{max-width:880px;gap:22px}
+.match.wide button{justify-content:flex-start;text-align:left;font-size:1.2rem;padding:8px 14px;min-height:68px;gap:10px}
+.match.wide button .e{font-size:2rem}
 .shake{animation:shake .35s}
 @keyframes shake{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
 .face svg{width:min(60vw,260px);height:auto;background:var(--soft);border-radius:28px}
@@ -199,9 +203,9 @@ function colorScreen(next) {
 }
 function startScreen(next) {
   show(`<div class="card center"><div class="big">🚀</div><h1>Let's play, ${esc(S.name)}!</h1>
-  <p>Today you will do <b>4 activities</b> and <b>3 mini-games</b>.</p><p class="es">Hoy vas a hacer 4 actividades y 3 minijuegos.</p>
+  <p>Today you will do <b>5 activities</b> and <b>3 mini-games</b>.</p><p class="es">Hoy vas a hacer 5 actividades y 3 minijuegos.</p>
   <div style="text-align:left;max-width:440px;margin:0 auto;font-size:1.3rem;line-height:2">
-  🎨 Activity 1: Colors<br>🐰 Mini-game 1<br>😊 Activity 2: How do they feel?<br>🔤 Mini-game 2<br>🐘 Activity 3: Animals<br>🐒 Mini-game 3<br>✏️ Activity 4: Choose and write</div>
+  🎨 Activity 1: Colors<br>🐰 Mini-game 1<br>😊 Activity 2: How do they feel?<br>🔤 Mini-game 2<br>🐘 Activity 3: Animals<br>🐒 Mini-game 3<br>✏️ Activity 4: Choose and write<br>🧩 Activity 5: Match the sentences</div>
   <button class="btn" id="ok">Start ➜</button></div>`);
   $("#ok").onclick = next;
 }
@@ -445,11 +449,38 @@ function act4(next) {
   })();
 }
 
+/* ---------- Actividad 5: unir oraciones ---------- */
+const SENT = [
+  ["🐒", "The monkey can", "climb a tree"], ["🍎", "The apple is", "red"], ["🍌", "The banana is", "long and yellow"], ["👦", "The boy feels", "happy"],
+  ["🐘", "The elephant is", "big and grey"], ["🐟", "The fish can", "swim"], ["👧", "The girl feels", "sleepy"]
+];
+function act5(next) {
+  const errs = {}; let sel = null, doneN = 0;
+  const ends = shuffle(SENT.map(x => x[2]));
+  show(`<div class="card center"><span class="tag">Activity 5 · Match the sentences</span><h2 class="q">Match the sentences</h2><p class="es">Unir las partes de cada oración. Tocá un comienzo y después su final.</p>
+  <div class="match wide"><div>${SENT.map(([e, a, b]) => `<button class="sl" data-n="${b}"><span class="e">${e}</span><span>${a} ...</span></button>`).join("")}</div>
+  <div>${ends.map(b => `<button class="sr" data-n="${b}">... ${b}</button>`).join("")}</div></div><div class="msg" id="msg"></div></div>`);
+  const ls = [...document.querySelectorAll(".sl")], rs = [...document.querySelectorAll(".sr")];
+  const clear = () => { sel = null; ls.forEach(c => c.classList.remove("pick")); };
+  ls.forEach(c => c.onclick = () => { if (c.classList.contains("done")) return; clear(); sel = c; c.classList.add("pick"); $("#msg").textContent = ""; speak(c.textContent.replace("...", "").trim()); });
+  rs.forEach(b => b.onclick = () => {
+    if (b.classList.contains("done")) return;
+    if (!sel) { $("#msg").textContent = "👈 Tap the beginning first! · ¡Primero tocá un comienzo!"; return; }
+    const n = sel.dataset.n;
+    if (b.dataset.n === n) {
+      const start = sel.textContent.replace("...", "").trim();
+      sel.classList.add("done"); b.classList.add("done"); sel.classList.remove("pick"); sel = null; doneN++;
+      $("#msg").textContent = "✅ Great!"; confetti(["⭐"], 5); speak(start + " " + b.dataset.n);
+      if (doneN === SENT.length) { S.sc.a5 = SENT.filter(x => !errs[x[2]]).length + "/" + SENT.length; setTimeout(next, 1400); }
+    } else { errs[n] = true; b.classList.add("shake"); setTimeout(() => b.classList.remove("shake"), 400); $("#msg").textContent = "Try again! 💪 · ¡Probá de nuevo!"; }
+  });
+}
+
 /* ---------- final ---------- */
 function finalScreen() {
   show(`<div class="card center"><div class="huge">🏆</div><h1>Congratulations, ${esc(S.name)}!</h1><p style="font-size:1.4rem">You finished all the activities and mini-games.</p><p class="es">¡Terminaste todas las actividades y minijuegos!</p>
   <div style="max-width:420px;margin:12px auto;font-size:1.3rem;line-height:2;text-align:left;background:var(--soft);border-radius:18px;padding:8px 22px">
-  🎨 Activity 1: <b>${S.sc.a1}</b><br>😊 Activity 2: <b>${S.sc.a2}</b><br>🐘 Activity 3: <b>${S.sc.a3}</b><br>✏️ Activity 4: <b>${S.sc.a4}</b></div>
+  🎨 Activity 1: <b>${S.sc.a1}</b><br>😊 Activity 2: <b>${S.sc.a2}</b><br>🐘 Activity 3: <b>${S.sc.a3}</b><br>✏️ Activity 4: <b>${S.sc.a4}</b><br>🧩 Activity 5: <b>${S.sc.a5}</b></div>
   <div class="note"><p>✏️ <b>Show your notebook to your teacher.</b></p><p class="es" style="font-size:1.2rem">Mostrale tu cuaderno a tu docente.</p></div>
   <button class="btn alt" id="again">Play again 🔄</button></div>`);
   confetti(["🎉", "⭐", "🐰", "🐒", "🐘", "🍎", "🌈"], 45);
@@ -462,7 +493,7 @@ function saveProgress(i) { try { sessionStorage.setItem(KEY, JSON.stringify({ i,
 function clearProgress() { try { sessionStorage.removeItem(KEY); } catch (e) {} }
 function loadProgress() { try { return JSON.parse(sessionStorage.getItem(KEY)); } catch (e) { return null; } }
 function run(resume) {
-  const steps = [welcome, colorScreen, startScreen, act1, game1, notice("Activity 1", "a1"), act2, game2, notice("Activity 2", "a2"), act3, game3, notice("Activity 3", "a3"), act4, notice("Activity 4", "a4"), finalScreen];
+  const steps = [welcome, colorScreen, startScreen, act1, game1, notice("Activity 1", "a1"), act2, game2, notice("Activity 2", "a2"), act3, game3, notice("Activity 3", "a3"), act4, notice("Activity 4", "a4"), act5, notice("Activity 5", "a5"), finalScreen];
   let i = 0;
   const saved = resume ? loadProgress() : null;
   if (saved && saved.name && saved.i >= 1 && saved.i < steps.length) { S.name = saved.name; S.sc = saved.sc || {}; applyColor(saved.color || S.color); i = saved.i; }
