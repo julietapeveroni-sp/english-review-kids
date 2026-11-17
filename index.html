@@ -330,7 +330,7 @@ const CAN = [
 function act3(next) {
   const items = shuffle(CAN).map(([em, an, verb, can]) => ({ render(box, report) {
     const q = `Can the ${an} ${verb}?`;
-    box.innerHTML = `<div class="center huge">${em}</div><h2 class="q">${q}${sayBtn(q)}</h2><p class="es center">¿Puede ${({ cat: "el gato", elephant: "el elefante", fish: "el pez", snail: "el caracol", snake: "la serpiente", monkey: "el mono" })[an]} ${({ sleep: "dormir", fly: "volar", swim: "nadar", run: "correr", crawl: "arrastrarse", climb: "trepar" })[verb]}?</p>
+    box.innerHTML = `<div class="center huge">${em}</div><h2 class="q">${q}${sayBtn(q)}</h2>
     <div class="center"><button class="btn yes" data-v="1">✅ Yes, it can.</button><button class="btn no" data-v="0">❌ No, it can't.</button></div>`;
     bindSay(box);
     box.querySelectorAll("[data-v]").forEach(b => b.onclick = () => {
