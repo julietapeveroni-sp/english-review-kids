@@ -1,0 +1,442 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>English Fun Time</title>
+<style>
+:root{--main:#4da3ff;--dark:color-mix(in srgb,var(--main) 52%,#000);--soft:color-mix(in srgb,var(--main) 16%,#fff)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{font-size:clamp(17px,2.1vw,23px)}
+html,body{margin:0}
+body{min-height:100vh;min-height:100dvh;background:var(--main);font-family:"Trebuchet MS","Comic Sans MS",Verdana,sans-serif;color:#222;transition:background .4s;touch-action:manipulation;-webkit-user-select:none;user-select:none}
+input{-webkit-user-select:text;user-select:text}
+#bar{position:sticky;top:0;height:12px;background:rgba(255,255,255,.45);z-index:5}
+#barfill{display:block;height:100%;width:0;background:var(--dark);transition:width .4s}
+header{text-align:center;padding:12px 12px 0}
+header span{display:inline-block;background:#fff;border-radius:999px;padding:6px 20px;font-weight:700;font-size:.95rem;box-shadow:0 3px 0 rgba(0,0,0,.15)}
+#app{max-width:980px;margin:0 auto;padding:14px 16px 28px}
+.card{background:#fff;border-radius:30px;padding:clamp(16px,3vw,32px);box-shadow:0 8px 0 rgba(0,0,0,.15);animation:pop .35s ease}
+@keyframes pop{from{transform:scale(.96);opacity:0}to{transform:none;opacity:1}}
+h1{margin:.2em 0;font-size:2.1rem;color:var(--dark);text-align:center}
+h2{margin:.4em 0;font-size:1.5rem}
+h2.q{font-size:1.7rem;margin:.4em 0;text-align:center}
+p{font-size:1.15rem;line-height:1.5;margin:.5em 0}
+.es{color:#555;font-size:.95rem;font-style:italic;margin:.1em 0 .5em}
+.tag{display:inline-block;background:var(--soft);color:var(--dark);font-weight:700;border-radius:999px;padding:5px 16px;margin-bottom:8px}
+.center{text-align:center}
+.big{font-size:5rem;line-height:1.1}
+.huge{font-size:clamp(5rem,16vw,8.5rem);line-height:1.1}
+.btn{font:inherit;font-weight:700;font-size:1.3rem;min-height:60px;padding:12px 30px;border:0;border-radius:18px;background:var(--dark);color:#fff;cursor:pointer;box-shadow:0 6px 0 rgba(0,0,0,.3);margin:8px 6px}
+.btn:active{transform:translateY(4px);box-shadow:0 2px 0 rgba(0,0,0,.3)}
+.btn.alt{background:#fff;color:var(--dark);border:4px solid var(--dark)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.yes{background:#2e9e3e}.btn.no{background:#d9534f}
+.btn small{display:block;font-size:.8rem;font-weight:400}
+.say{font-size:1.6rem;min-height:56px;min-width:56px;border:4px solid var(--dark);background:#fff;border-radius:50%;cursor:pointer;vertical-align:middle;margin-left:8px}
+input[type=text]{font:inherit;font-size:1.6rem;width:100%;padding:14px 18px;border:4px solid var(--dark);border-radius:16px;margin:6px 0 12px;text-align:center;-webkit-user-select:text;user-select:text}
+label{font-weight:700;font-size:1.15rem}
+.fb{margin-top:14px;border-radius:18px;padding:8px 18px;text-align:center}
+.fb.good{background:#e3fbe1}.fb.bad{background:#ffe7e7}
+.fb p{margin:.3em 0}
+.swatches{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin:16px 0}
+.sw{width:104px;border:5px solid #fff;border-radius:20px;cursor:pointer;padding:0;font:inherit;font-weight:700;overflow:hidden;background:#fff;box-shadow:0 3px 0 rgba(0,0,0,.25)}
+.sw i{display:block;height:64px}
+.sw span{display:block;padding:5px 0;font-size:1rem}
+.sw.sel{border-color:#222;transform:scale(1.08)}
+.match{display:grid;grid-template-columns:1fr 1fr;gap:24px;max-width:640px;margin:10px auto}
+.match button{display:flex;align-items:center;justify-content:center;width:100%;min-height:72px;margin:8px 0;font:inherit;font-size:1.5rem;font-weight:700;padding:8px;background:var(--soft);border:4px solid var(--dark);border-radius:18px;cursor:pointer}
+.match button.col i{display:block;width:52px;height:52px;border-radius:50%;border:4px solid #fff;box-shadow:0 0 0 3px rgba(0,0,0,.35)}
+.match button.pick{background:#fff3b0;transform:scale(1.05)}
+.match button.done{background:#c8f7c5;border-color:#2e9e3e;cursor:default}
+.shake{animation:shake .35s}
+@keyframes shake{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.face svg{width:min(60vw,260px);height:auto;background:var(--soft);border-radius:28px}
+.face{text-align:center}
+.keys{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:12px 0}
+.key{width:56px;height:56px;font:inherit;font-weight:700;font-size:1.3rem;border:0;border-radius:12px;background:var(--dark);color:#fff;cursor:pointer;box-shadow:0 4px 0 rgba(0,0,0,.3)}
+.key:disabled{opacity:.3;box-shadow:none}
+.key.ok{background:#2e9e3e;opacity:1}.key.no{background:#d33}
+.word{font-size:2.4rem;letter-spacing:.3em;text-align:center;font-weight:700;margin:6px 0;word-break:break-word}
+.bank{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:10px 0}
+.bank span{background:var(--soft);border-radius:999px;padding:4px 14px;font-weight:700;color:var(--dark);font-size:1rem}
+.corr{border-left:8px solid var(--dark);background:var(--soft);border-radius:14px;padding:8px 16px;margin:12px 0;text-align:left}
+.lt-ok{color:#16802a}.lt-bad{color:#d33;text-decoration:underline}
+.spell{font-size:2.2rem;letter-spacing:.15em;font-weight:700}
+.rating{font-size:4rem;font-weight:700;color:var(--dark)}
+.note{background:#fff8d6;border:5px dashed #e0a800;border-radius:22px;padding:10px 18px;margin:14px auto;max-width:620px}
+.note p{margin:.3em 0;font-size:1.3rem}
+.conf{position:fixed;top:-40px;font-size:2.2rem;pointer-events:none;animation:fall linear forwards;z-index:9}
+@keyframes fall{to{transform:translateY(110vh) rotate(360deg)}}
+.field{position:relative;height:min(56vh,430px);min-height:300px;background:linear-gradient(#bfe6ff 0 62%,#9ad37a 62%);border-radius:24px;overflow:hidden;border:4px solid var(--soft)}
+.an{position:absolute;width:84px;height:84px;font-size:3.4rem;line-height:1;background:transparent;border:0;cursor:pointer;padding:0;animation:pop .3s ease;transition:left .35s,top .35s}
+.an.hop{animation:hop .4s}
+@keyframes hop{50%{transform:translateY(-26px) scale(1.15)}}
+.counter{font-size:1.8rem;font-weight:700;text-align:center;margin:6px 0;color:var(--dark)}
+.msg{min-height:2.2em;text-align:center;font-size:1.2rem;font-weight:700}
+.tree{height:min(58vh,440px);min-height:320px;background:linear-gradient(#bfe6ff 0 82%,#9ad37a 82%);border-radius:24px;position:relative;overflow:hidden;border:4px solid var(--soft)}
+.trunk{position:absolute;left:50%;transform:translateX(-50%);bottom:0;width:70px;height:82%;background:linear-gradient(90deg,#8a5a2b,#a8733a 50%,#8a5a2b);border-radius:14px 14px 0 0}
+.crown{position:absolute;left:50%;transform:translateX(-50%);top:-2%;width:70%;height:36%;background:#3fa34d;border-radius:50%;box-shadow:-60px 24px 0 -8px #4cb85a,60px 24px 0 -8px #4cb85a}
+.mk{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(3% + var(--p,0)*58%);width:100px;height:100px;font-size:4.4rem;line-height:1;background:transparent;border:0;cursor:pointer;padding:0;transition:bottom .25s;z-index:3}
+.mk:active{transform:translateX(-50%) scale(.92)}
+.nana{position:absolute;left:62%;top:6%;font-size:3rem;z-index:2}
+.prog{height:22px;background:#e7e7e7;border-radius:999px;overflow:hidden;margin:6px auto;max-width:520px}
+.prog i{display:block;height:100%;width:0;background:#2e9e3e;transition:width .25s}
+@media(max-width:560px){h1{font-size:1.7rem}.big{font-size:4rem}.match{gap:12px}.key{width:46px;height:46px}.an{width:70px;height:70px;font-size:2.8rem}}
+@media(orientation:landscape) and (max-height:620px){.field,.tree{height:52vh;min-height:230px}}
+</style>
+</head>
+<body>
+<div id="bar"><i id="barfill"></i></div>
+<header><span>🌈 English Fun Time</span></header>
+<div id="app"></div>
+<noscript><p style="background:#fff;padding:20px">Please turn on JavaScript to use this page.</p></noscript>
+
+<script>
+"use strict";
+/* ---------- utilidades ---------- */
+const S = { name: "", color: "#4da3ff", sc: {} };
+const app = document.getElementById("app");
+const $ = (s, r = document) => r.querySelector(s);
+const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const pick = (a, n) => shuffle(a).slice(0, n);
+const one = a => a[Math.floor(Math.random() * a.length)];
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+function show(html) { app.innerHTML = html; window.scrollTo(0, 0); return app; }
+function confetti(list, n = 30) {
+  for (let i = 0; i < n; i++) {
+    const d = document.createElement("div");
+    d.className = "conf"; d.textContent = one(list);
+    d.style.left = Math.random() * 100 + "vw";
+    d.style.animationDuration = 2.5 + Math.random() * 3 + "s";
+    d.style.animationDelay = Math.random() * 1.5 + "s";
+    document.body.appendChild(d); setTimeout(() => d.remove(), 8000);
+  }
+}
+function applyColor(hex) { S.color = hex; document.documentElement.style.setProperty("--main", hex); }
+/* voz del dispositivo (no usa ningún servicio de la página) */
+const canSpeak = "speechSynthesis" in window;
+function speak(text) {
+  if (!canSpeak) return;
+  try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(text); u.lang = "en-US"; u.rate = 0.8; speechSynthesis.speak(u); } catch (e) {}
+}
+const sayBtn = t => canSpeak ? `<button class="say" data-say="${esc(t)}" aria-label="Listen">🔊</button>` : "";
+function bindSay(root) { root.querySelectorAll("[data-say]").forEach(b => b.onclick = () => speak(b.dataset.say)); }
+
+/* ---------- motor de preguntas ---------- */
+function runItems(items, title, done) {
+  let i = 0, score = 0;
+  (function next() {
+    if (i >= items.length) { done(score, items.length); return; }
+    show(`<div class="card"><span class="tag">${title} · ${i + 1}/${items.length}</span><div id="box"></div><div id="fb"></div></div>`);
+    let answered = false;
+    items[i].render($("#box"), (ok, msg) => {
+      if (answered) return; answered = true; if (ok) score++;
+      const fb = $("#fb"); fb.className = "fb " + (ok ? "good" : "bad");
+      fb.innerHTML = `<p>${ok ? "✅ <b>Great!</b> <span class='es'>¡Muy bien!</span>" : "❌ <b>Not this time.</b> <span class='es'>¡La próxima sale!</span>"}</p><p>${msg || ""}</p><button class="btn" id="nx">${i + 1 < items.length ? "Next ➜" : "Finish ➜"}</button>`;
+      if (ok) confetti(["⭐"], 6);
+      $("#nx").onclick = () => { i++; next(); };
+    });
+  })();
+}
+
+/* ---------- caras (dibujos de emociones) ---------- */
+const SKINS = ["#ffd9b0", "#f1c18f", "#d9a066", "#a9714b"];
+const HAIRS = ["#3b2a1d", "#7a4a25", "#e0b84e", "#b9461b", "#1d1d1d"];
+function face(emo, girl, skin, hair) {
+  const eyeD = (y = 98) => `<circle cx="74" cy="${y}" r="7" fill="#222"/><circle cx="126" cy="${y}" r="7" fill="#222"/><circle cx="76" cy="${y - 2}" r="2.3" fill="#fff"/><circle cx="128" cy="${y - 2}" r="2.3" fill="#fff"/>`;
+  const brow = (a, b, c, d) => `<path d="M${a} L${b}" stroke="${hair}" stroke-width="6" stroke-linecap="round"/><path d="M${c} L${d}" stroke="${hair}" stroke-width="6" stroke-linecap="round"/>`;
+  const cheeks = `<circle cx="58" cy="118" r="9" fill="rgba(255,90,90,.3)"/><circle cx="142" cy="118" r="9" fill="rgba(255,90,90,.3)"/>`;
+  let f = "", over = "", tint = "";
+  switch (emo) {
+    case "happy": f = eyeD() + `<path d="M62 125 Q100 170 138 125 Z" fill="#fff" stroke="#222" stroke-width="4" stroke-linejoin="round"/>` + cheeks; break;
+    case "sad": f = eyeD(102) + brow("60 84", "88 76", "140 84", "112 76") + `<path d="M72 148 Q100 122 128 148" stroke="#222" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M70 116 q-8 14 0 20 q8 -6 0 -20Z" fill="#5aa9ff"/>`; break;
+    case "angry": tint = `<ellipse cx="100" cy="100" rx="58" ry="62" fill="rgba(255,60,40,.32)"/>`; f = eyeD(102) + brow("58 78", "90 94", "142 78", "110 94") + `<path d="M74 146 Q100 126 126 146" stroke="#222" stroke-width="5" fill="none" stroke-linecap="round"/>`; over = `<text x="150" y="40" font-size="34">💢</text>`; break;
+    case "sleepy": f = `<path d="M62 100 Q74 112 86 100 M114 100 Q126 112 138 100" stroke="#222" stroke-width="5" fill="none" stroke-linecap="round"/><ellipse cx="100" cy="140" rx="9" ry="12" fill="#c2335a"/>`; over = `<text x="20" y="54" font-size="30" font-weight="700" fill="#4a6fd0">Z</text><text x="8" y="32" font-size="22" font-weight="700" fill="#4a6fd0">z</text>`; break;
+    case "hungry": f = eyeD(96) + `<ellipse cx="100" cy="138" rx="20" ry="16" fill="#8b1a1a" stroke="#222" stroke-width="4"/><ellipse cx="100" cy="146" rx="11" ry="7" fill="#ff8aa1"/>`; over = `<text x="128" y="38" font-size="34">🍔</text>`; break;
+    case "thirsty": f = eyeD(96) + `<path d="M76 130 Q100 140 124 130 Q124 146 100 148 Q76 146 76 130Z" fill="#8b1a1a" stroke="#222" stroke-width="4"/><path d="M92 140 Q100 168 108 140Z" fill="#ff8aa1" stroke="#222" stroke-width="3"/><path d="M46 60 q-7 12 0 17 q7 -5 0 -17Z" fill="#5aa9ff"/>`; over = `<text x="128" y="38" font-size="34">🥤</text>`; break;
+    case "nervous": f = eyeD(100).replace(/r="7"/g, 'r="5"') + brow("60 82", "88 74", "140 82", "112 74") + `<path d="M70 142 q8 -9 15 0 t15 0 t15 0 t15 0" stroke="#222" stroke-width="4.5" fill="none" stroke-linecap="round"/><path d="M148 62 q-8 14 0 20 q8 -6 0 -20Z" fill="#5aa9ff"/><path d="M40 98 q-8 14 0 20 q8 -6 0 -20Z" fill="#5aa9ff"/>`; break;
+    case "excited": f = `<text x="55" y="112" font-size="38" fill="#ffb800">★</text><text x="107" y="112" font-size="38" fill="#ffb800">★</text><path d="M60 124 Q100 176 140 124 Z" fill="#fff" stroke="#222" stroke-width="4" stroke-linejoin="round"/><path d="M82 140 Q100 158 118 140 Q100 132 82 140Z" fill="#ff8aa1"/>` + cheeks; over = `<text x="20" y="40" font-size="26">✨</text><text x="156" y="44" font-size="26">✨</text>`; break;
+  }
+  const back = girl ? `<ellipse cx="100" cy="104" rx="70" ry="78" fill="${hair}"/><circle cx="26" cy="118" r="20" fill="${hair}"/><circle cx="174" cy="118" r="20" fill="${hair}"/>` : "";
+  const top = `<path d="M40 92 Q40 28 100 26 Q160 28 160 92 Q138 64 100 66 Q62 64 40 92Z" fill="${hair}"/>`;
+  const bow = girl ? `<circle cx="150" cy="40" r="9" fill="#ef4d8b"/><circle cx="166" cy="48" r="9" fill="#ef4d8b"/>` : "";
+  return `<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="face showing ${emo}">
+  ${back}<ellipse cx="100" cy="104" rx="58" ry="62" fill="${skin}"/>${tint}${f}${top}${bow}${over}</svg>`;
+}
+function newFace(emo, girl) { return face(emo, girl, one(SKINS), one(HAIRS)); }
+
+/* ---------- pantallas simples ---------- */
+function welcome(next) {
+  show(`<div class="card center"><div class="big">👋</div><h1>Hello!</h1><h2>What's your name?</h2><p class="es">¿Cómo te llamás?</p>
+  <div style="max-width:460px;margin:0 auto"><input type="text" id="fn" autocomplete="off" placeholder="Write your name"></div>
+  <p class="es">Tu nombre solo se ve en la pantalla. No se guarda.</p>
+  <button class="btn" id="ok">Next ➜</button><div id="err" style="color:#c00;font-weight:700"></div></div>`);
+  const go = () => {
+    const f = $("#fn").value.trim();
+    if (!f) { $("#err").textContent = "Please write your name 😊"; return; }
+    S.name = f; next();
+  };
+  $("#ok").onclick = go; $("#fn").onkeydown = e => { if (e.key === "Enter") go(); };
+}
+const COLORS = [["red", "#ff4d4d"], ["blue", "#3d8bff"], ["yellow", "#ffd93d"], ["green", "#3fbf5f"], ["orange", "#ff9f43"], ["pink", "#ff8fc7"], ["purple", "#a56cf0"], ["brown", "#a8744a"]];
+function colorScreen(next) {
+  show(`<div class="card center"><div class="big">🎨</div><h1>Hello, ${esc(S.name)}!</h1><h2>What's your favorite color?</h2><p class="es">¿Cuál es tu color favorito? Tocalo y la página cambia.</p>
+  <div class="swatches">${COLORS.map(([n, h]) => `<button class="sw" data-h="${h}"><i style="background:${h}"></i><span>${n}</span></button>`).join("")}</div>
+  <button class="btn" id="ok" disabled>Next ➜</button></div>`);
+  const ok = $("#ok");
+  document.querySelectorAll(".sw").forEach(b => b.onclick = () => {
+    document.querySelectorAll(".sw").forEach(x => x.classList.remove("sel")); b.classList.add("sel");
+    applyColor(b.dataset.h); ok.disabled = false;
+  });
+  ok.onclick = next;
+}
+function startScreen(next) {
+  show(`<div class="card center"><div class="big">🚀</div><h1>Let's play, ${esc(S.name)}!</h1>
+  <p>Today you will do <b>4 activities</b> and <b>3 mini-games</b>.</p><p class="es">Hoy vas a hacer 4 actividades y 3 minijuegos.</p>
+  <div style="text-align:left;max-width:440px;margin:0 auto;font-size:1.3rem;line-height:2">
+  🎨 Activity 1: Colors<br>🐰 Mini-game 1<br>😊 Activity 2: Emotions<br>🔤 Mini-game 2<br>🐘 Activity 3: Animals<br>🐒 Mini-game 3<br>✏️ Activity 4: Spelling</div>
+  <button class="btn" id="ok">Start ➜</button></div>`);
+  $("#ok").onclick = next;
+}
+/* aviso para anotar la nota en el cuaderno (inglés + español) */
+function notice(label, key) {
+  return next => {
+    show(`<div class="card center"><div class="big">📓</div><h1>${label} finished!</h1>
+    <div class="note"><p>✏️ <b>Write your score in your English notebook.</b></p><p class="es" style="font-size:1.2rem">Anotá tu nota en el cuaderno de inglés.</p></div>
+    <div class="rating">${S.sc[key]}</div><button class="btn" id="ok">Continue ➜</button></div>`);
+    confetti(["⭐", "🎉"], 14); $("#ok").onclick = next;
+  };
+}
+
+/* ---------- Actividad 1: unir colores con su nombre ---------- */
+const COL8 = [["red", "#ff3b3b"], ["blue", "#2f7bff"], ["yellow", "#ffd400"], ["green", "#2fb84f"], ["orange", "#ff8c1a"], ["pink", "#ff7eb9"], ["purple", "#9b5de5"], ["brown", "#8d5a2b"]];
+function act1(next) {
+  const items = pick(COL8, 6), names = shuffle(items.map(x => x[0])), errs = {};
+  let sel = null, doneN = 0;
+  show(`<div class="card center"><span class="tag">Activity 1 · Colors</span><h2 class="q">Match the color with its name</h2><p class="es">Unir cada color con su nombre. Tocá un color y después su nombre.</p>
+  <div class="match"><div>${items.map(([n, h]) => `<button class="col" data-n="${n}" aria-label="color"><i style="background:${h}"></i></button>`).join("")}</div>
+  <div>${names.map(n => `<button class="nm" data-n="${n}">${n}</button>`).join("")}</div></div><div class="msg" id="msg"></div></div>`);
+  const cols = [...document.querySelectorAll(".col")], nms = [...document.querySelectorAll(".nm")];
+  const clear = () => { sel = null; cols.forEach(c => c.classList.remove("pick")); };
+  cols.forEach(c => c.onclick = () => { if (c.classList.contains("done")) return; clear(); sel = c; c.classList.add("pick"); $("#msg").textContent = ""; });
+  nms.forEach(b => b.onclick = () => {
+    speak(b.dataset.n); if (b.classList.contains("done") || !sel) { if (!sel) $("#msg").textContent = "👈 Tap a color first! · ¡Primero tocá un color!"; return; }
+    const n = sel.dataset.n;
+    if (b.dataset.n === n) {
+      sel.classList.add("done"); b.classList.add("done"); sel.classList.remove("pick"); sel = null; doneN++; $("#msg").textContent = "✅ Great!";
+      confetti(["⭐"], 5);
+      if (doneN === items.length) {
+        const ok = items.filter(([n]) => !errs[n]).length; S.sc.a1 = ok + "/" + items.length;
+        setTimeout(next, 900);
+      }
+    } else { errs[n] = true; b.classList.add("shake"); setTimeout(() => b.classList.remove("shake"), 400); $("#msg").textContent = "Try again! 💪 · ¡Probá de nuevo!"; }
+  });
+}
+
+/* ---------- Mini-juego 1: tocar el conejo 3 veces ---------- */
+function game1(next) {
+  const ZOO = ["🐶", "🐱", "🐘", "🐒", "🐷", "🐮", "🐴", "🦆", "🐸", "🐻"];
+  const NAME = { "🐶": "dog", "🐱": "cat", "🐘": "elephant", "🐒": "monkey", "🐷": "pig", "🐮": "cow", "🐴": "horse", "🦆": "duck", "🐸": "frog", "🐻": "bear" };
+  const COLS = 4, ROWS = 3; let taps = 0; const used = new Set();
+  show(`<div class="card center"><span class="tag">🎮 Mini-game 1</span><h2 class="q">Click on the rabbit 3 times! 🐰</h2><p class="es">¡Tocá al conejo 3 veces!</p>
+  <div class="counter" id="cnt">🐰 0 / 3</div><div class="field" id="field"></div><div class="msg" id="msg"></div></div>`);
+  const field = $("#field");
+  const freeCell = () => { const c = shuffle([...Array(COLS * ROWS).keys()]).find(k => !used.has(k)); return c; };
+  const place = (el, cell) => { el.dataset.cell = cell; const cw = 100 / COLS, ch = 100 / ROWS; el.style.left = `calc(${(cell % COLS) * cw + cw / 2}% - 42px)`; el.style.top = `calc(${(Math.floor(cell / COLS)) * ch + ch / 2}% - 42px)`; };
+  const addAnimal = emoji => {
+    const cell = freeCell(); if (cell === undefined) return; used.add(cell);
+    const b = document.createElement("button"); b.className = "an"; b.textContent = emoji; b.setAttribute("aria-label", emoji === "🐰" ? "rabbit" : NAME[emoji]);
+    place(b, cell); field.appendChild(b);
+    if (emoji === "🐰") { b.id = "rab"; b.onclick = hitRabbit; }
+    else b.onclick = () => { b.classList.remove("hop"); void b.offsetWidth; b.classList.add("hop"); $("#msg").innerHTML = `That's a <b>${NAME[emoji]}</b>! ${emoji} Find the rabbit 🐰`; speak(NAME[emoji]); };
+    return b;
+  };
+  function hitRabbit() {
+    const rab = $("#rab"); taps++; $("#cnt").textContent = `🐰 ${taps} / 3`; speak("rabbit");
+    $("#msg").textContent = taps < 3 ? "Good! Again! 👍 · ¡Bien! ¡Otra vez!" : "";
+    if (taps >= 3) { rab.onclick = null; confetti(["🐰", "🥕", "⭐", "🎉"], 30); $("#msg").innerHTML = `<div style="font-size:1.8rem">🎉 Great job, ${esc(S.name)}!</div><button class="btn" id="ok">Continue ➜</button>`; $("#ok").onclick = next; return; }
+    used.delete(+rab.dataset.cell); const nc = freeCell(); used.add(nc); place(rab, nc);
+    rab.classList.remove("hop"); void rab.offsetWidth; rab.classList.add("hop");
+    pick(ZOO, 2).forEach(addAnimal);
+  }
+  addAnimal("🐰"); pick(ZOO, 3).forEach(addAnimal);
+}
+
+/* ---------- Actividad 2: true or false con emociones ---------- */
+const EMO = ["sleepy", "hungry", "nervous", "angry", "happy", "excited", "thirsty", "sad"];
+function act2(next) {
+  const items = shuffle(EMO).map((emo, i) => {
+    const girl = Math.random() < .5, truth = i % 2 === 0 ? true : false; const shown = truth ? emo : one(EMO.filter(e => e !== emo));
+    // la cara muestra "emo"; la oración dice "shown"
+    const pr = girl ? "She" : "He", svg = newFace(emo, girl), sentence = `${pr} feels ${shown}.`;
+    return { render(box, report) {
+      box.innerHTML = `<div class="face">${svg}</div><h2 class="q">True or false?</h2><p class="center" style="font-size:1.8rem"><b>${sentence}</b>${sayBtn(sentence)}</p>
+      <p class="es center">¿Verdadero o falso?</p>
+      <div class="center"><button class="btn yes" data-v="1">✅ True<small>Verdadero</small></button><button class="btn no" data-v="0">❌ False<small>Falso</small></button></div>`;
+      bindSay(box);
+      box.querySelectorAll("[data-v]").forEach(b => b.onclick = () => {
+        box.querySelectorAll("[data-v]").forEach(x => x.disabled = true);
+        const ok = (b.dataset.v === "1") === truth;
+        report(ok, ok ? "" : `${pr} feels <b>${emo}</b>.`);
+      });
+    } };
+  });
+  runItems(shuffle(items), "Activity 2", (s, t) => { S.sc.a2 = s + "/" + t; next(); });
+}
+
+/* ---------- Mini-juego 2: ahorcado con emociones ---------- */
+function gallows(m) {
+  const parts = [`<circle cx="150" cy="62" r="16" stroke="#222" stroke-width="5" fill="#fff"/>`, `<line x1="150" y1="78" x2="150" y2="125" stroke="#222" stroke-width="5"/>`,
+    `<line x1="150" y1="90" x2="128" y2="110" stroke="#222" stroke-width="5"/>`, `<line x1="150" y1="90" x2="172" y2="110" stroke="#222" stroke-width="5"/>`,
+    `<line x1="150" y1="125" x2="132" y2="155" stroke="#222" stroke-width="5"/>`, `<line x1="150" y1="125" x2="168" y2="155" stroke="#222" stroke-width="5"/>`];
+  return `<svg viewBox="0 0 220 180" width="200" style="display:block;margin:auto"><g stroke="#7a5230" stroke-width="7"><line x1="20" y1="170" x2="110" y2="170"/><line x1="50" y1="170" x2="50" y2="15"/><line x1="46" y1="18" x2="150" y2="18"/><line x1="150" y1="18" x2="150" y2="46" stroke-width="4"/></g>${parts.slice(0, m).join("")}</svg>`;
+}
+function game2(next) {
+  function round() {
+    const emo = one(EMO), word = emo.toUpperCase(), svg = newFace(emo, Math.random() < .5); let miss = 0; const used = new Set();
+    const draw = () => {
+      const shown = word.split("").map(c => used.has(c) ? c : "_").join(" ");
+      const won = word.split("").every(c => used.has(c)), lost = miss >= 6;
+      show(`<div class="card center"><span class="tag">🎮 Mini-game 2 · Hangman</span><h2 class="q">How does he/she feel?</h2><p class="es">¿Cómo se siente? Adiviná la palabra.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center;align-items:center"><div class="face">${svg}</div>${gallows(miss)}</div>
+      <div class="word">${shown}</div><p>Mistakes: <b>${miss}/6</b></p>
+      <div class="bank">${EMO.map(e => `<span>${e}</span>`).join("")}</div>
+      ${won ? `<h2>🎉 Yes! "${emo}" ${sayBtn(emo)}</h2>` : lost ? `<h2>😅 It was "<b>${emo}</b>" ${sayBtn(emo)}</h2>` : `<div class="keys">${"ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").map(c => `<button class="key ${used.has(c) ? (word.includes(c) ? "ok" : "no") : ""}" data-c="${c}" ${used.has(c) ? "disabled" : ""}>${c}</button>`).join("")}</div>`}
+      ${won || lost ? `<button class="btn alt" id="again">Play again 🔄</button><button class="btn" id="ok">Continue ➜</button>` : ""}</div>`);
+      bindSay(app);
+      if (won) confetti(["⭐", "🎉"], 15);
+      document.querySelectorAll(".key").forEach(b => b.onclick = () => press(b.dataset.c));
+      if (won || lost) { $("#again").onclick = round; $("#ok").onclick = () => { document.onkeydown = null; next(); }; }
+    };
+    const press = c => { if (used.has(c) || miss >= 6) return; used.add(c); if (!word.includes(c)) miss++; draw(); };
+    document.onkeydown = e => { const c = e.key.toUpperCase(); if (/^[A-Z]$/.test(c) && !e.ctrlKey && !e.metaKey && !e.altKey) press(c); };
+    draw();
+  }
+  round();
+}
+
+/* ---------- Actividad 3: can / can't con animales ---------- */
+const CAN = [
+  ["🐱", "cat", "sleep", true], ["🐘", "elephant", "fly", false], ["🐟", "fish", "swim", true],
+  ["🐌", "snail", "run", false], ["🐍", "snake", "crawl", true], ["🐒", "monkey", "climb", true]
+];
+function act3(next) {
+  const items = shuffle(CAN).map(([em, an, verb, can]) => ({ render(box, report) {
+    const q = `Can the ${an} ${verb}?`;
+    box.innerHTML = `<div class="center huge">${em}</div><h2 class="q">${q}${sayBtn(q)}</h2><p class="es center">¿Puede ${({ cat: "el gato", elephant: "el elefante", fish: "el pez", snail: "el caracol", snake: "la serpiente", monkey: "el mono" })[an]} ${({ sleep: "dormir", fly: "volar", swim: "nadar", run: "correr", crawl: "arrastrarse", climb: "trepar" })[verb]}?</p>
+    <div class="center"><button class="btn yes" data-v="1">✅ Yes, it can.</button><button class="btn no" data-v="0">❌ No, it can't.</button></div>`;
+    bindSay(box);
+    box.querySelectorAll("[data-v]").forEach(b => b.onclick = () => {
+      box.querySelectorAll("[data-v]").forEach(x => x.disabled = true);
+      const ok = (b.dataset.v === "1") === can;
+      report(ok, ok ? "" : `The answer is: <b>${can ? "Yes, it can." : "No, it can't."}</b>`);
+    });
+  } }));
+  runItems(items, "Activity 3", (s, t) => { S.sc.a3 = s + "/" + t; next(); });
+}
+
+/* ---------- Mini-juego 3: el mono sube al árbol ---------- */
+function game3(next) {
+  const GOAL = 10; let taps = 0;
+  show(`<div class="card center"><span class="tag">🎮 Mini-game 3</span><h2 class="q">Tap on the monkey to climb the tree! 🌳</h2><p class="es">¡Tocá al mono 10 veces para que suba al árbol!</p>
+  <div class="counter" id="cnt">🐒 0 / ${GOAL}</div><div class="prog"><i id="pf"></i></div>
+  <div class="tree" id="tree"><div class="trunk"></div><div class="crown"></div><div class="nana">🍌</div><button class="mk" id="mk" aria-label="monkey">🐒</button></div><div class="msg" id="msg"></div></div>`);
+  const mk = $("#mk");
+  mk.onclick = () => {
+    if (taps >= GOAL) return; taps++; mk.style.setProperty("--p", taps / GOAL);
+    $("#cnt").textContent = `🐒 ${taps} / ${GOAL}`; $("#pf").style.width = taps / GOAL * 100 + "%";
+    if (taps === 5) $("#msg").textContent = "Halfway! 💪 · ¡A la mitad!";
+    if (taps >= GOAL) {
+      mk.textContent = "🐵"; confetti(["🍌", "🐒", "⭐", "🎉"], 30);
+      $("#msg").innerHTML = `<div style="font-size:1.8rem">🎉 He did it! Great job, ${esc(S.name)}!</div><button class="btn" id="ok">Continue ➜</button>`; $("#ok").onclick = next;
+    }
+  };
+}
+
+/* ---------- Actividad 4: escribir bien el nombre ---------- */
+const WORDS = [
+  ["🐶", "dog"], ["🐱", "cat"], ["🐰", "rabbit", "bunny"], ["🐒", "monkey"], ["🐘", "elephant"], ["🐟", "fish"], ["🐦", "bird"], ["🐴", "horse"], ["🐮", "cow"], ["🐷", "pig"], ["🦆", "duck"], ["🐍", "snake"],
+  ["🍎", "apple"], ["🍌", "banana"], ["🍞", "bread"], ["🥛", "milk"], ["🧀", "cheese"], ["🍕", "pizza"], ["🥚", "egg"], ["🍊", "orange"], ["🥕", "carrot"], ["🍰", "cake"]
+];
+function lcsTable(a, b) {
+  const d = Array.from({ length: a.length + 1 }, () => new Array(b.length + 1).fill(0));
+  for (let i = 1; i <= a.length; i++) for (let j = 1; j <= b.length; j++) d[i][j] = a[i - 1] === b[j - 1] ? d[i - 1][j - 1] + 1 : Math.max(d[i - 1][j], d[i][j - 1]);
+  return d;
+}
+function diffHtml(typed, correct) { // lo que escribió, con las letras mal o faltantes en rojo
+  const d = lcsTable(typed, correct); let i = typed.length, j = correct.length; const out = [];
+  while (i > 0 || j > 0) {
+    if (i > 0 && j > 0 && typed[i - 1] === correct[j - 1]) { out.push(`<span class="lt-ok">${esc(typed[i - 1])}</span>`); i--; j--; }
+    else if (j > 0 && (i === 0 || d[i][j - 1] >= d[i - 1][j])) { out.push(`<span class="lt-bad">▢</span>`); j--; }
+    else { out.push(`<span class="lt-bad">${esc(typed[i - 1])}</span>`); i--; }
+  }
+  return out.reverse().join("");
+}
+function act4(next) {
+  const list = shuffle(WORDS.slice(0, 12)).slice(0, 4).concat(shuffle(WORDS.slice(12)).slice(0, 4));
+  let idx = 0, score = 0;
+  (function nextWord() {
+    if (idx >= list.length) { S.sc.a4 = score + "/" + list.length; next(); return; }
+    const [em, ...acc] = list[idx], target = acc[0]; let tries = 0, finished = false, first = true;
+    show(`<div class="card center"><span class="tag">Activity 4 · Spelling · ${idx + 1}/${list.length}</span>
+    <div class="huge">${em}</div><h2 class="q">Write the word in English</h2><p class="es">Escribí el nombre en inglés. ¡Fijate bien cómo se escribe!</p>
+    <p class="spell" style="color:#999">${target.split("").map(() => "_").join(" ")}</p>
+    <div style="max-width:460px;margin:0 auto"><input type="text" id="ans" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="Write here..."></div>
+    <div><button class="btn" id="ck">Check ✔</button></div><div id="fb"></div></div>`);
+    const inp = $("#ans"), fb = $("#fb");
+    const finish = ok => {
+      finished = true; inp.disabled = true; $("#ck").style.display = "none";
+      if (ok) { confetti(["⭐"], 8); }
+      fb.insertAdjacentHTML("beforeend", `<button class="btn" id="nx">${idx + 1 < list.length ? "Next ➜" : "Finish ➜"}</button>`);
+      $("#nx").onclick = () => { idx++; nextWord(); };
+    };
+    const go = () => {
+      if (finished) return;
+      const v = inp.value.trim().toLowerCase().replace(/^(a|an|the)\s+/, ""); if (!v) return;
+      tries++;
+      if (acc.includes(v)) {
+        if (first) score++;
+        fb.className = "fb good"; fb.innerHTML = `<p>✅ <b>Great! ${esc(v)}</b> ${sayBtn(v)} <span class="es">¡Muy bien!</span></p>`; bindSay(fb); finish(true); return;
+      }
+      first = false;
+      const ratio = lcsTable(v, target)[v.length][target.length] / target.length;
+      fb.className = "fb bad";
+      if (tries >= 3) {
+        fb.innerHTML = `<p>It is spelled: <span class="spell lt-ok">${target}</span> ${sayBtn(target)}</p><p class="es">Se escribe así. ¡La próxima sale!</p>`; bindSay(fb); finish(false); return;
+      }
+      if (ratio >= 0.6) {
+        fb.innerHTML = `<p>👀 <b>Almost! Check the spelling.</b></p><p class="es">¡Casi! Revisá cómo se escribe. Mirá las letras en rojo.</p>
+        <div class="corr"><span class="spell">${diffHtml(v, target)}</span></div><p>Try again 💪</p>`;
+      } else {
+        fb.innerHTML = `<p>🤔 <b>Hmm, that's not it.</b> Look at the picture!</p><p class="es">Ese no es el nombre. ¡Mirá la imagen!</p><p>The word starts with <b>${target[0]}</b> and has <b>${target.length}</b> letters.</p>`;
+      }
+      inp.focus(); inp.select();
+    };
+    $("#ck").onclick = go; inp.onkeydown = e => { if (e.key === "Enter") go(); };
+  })();
+}
+
+/* ---------- final ---------- */
+function finalScreen() {
+  show(`<div class="card center"><div class="huge">🏆</div><h1>Congratulations, ${esc(S.name)}!</h1><p style="font-size:1.4rem">You finished all the activities and mini-games.</p><p class="es">¡Terminaste todas las actividades y minijuegos!</p>
+  <div style="max-width:420px;margin:12px auto;font-size:1.3rem;line-height:2;text-align:left;background:var(--soft);border-radius:18px;padding:8px 22px">
+  🎨 Activity 1: <b>${S.sc.a1}</b><br>😊 Activity 2: <b>${S.sc.a2}</b><br>🐘 Activity 3: <b>${S.sc.a3}</b><br>✏️ Activity 4: <b>${S.sc.a4}</b></div>
+  <div class="note"><p>✏️ <b>Show your notebook to your teacher.</b></p><p class="es" style="font-size:1.2rem">Mostrale tu cuaderno a tu docente.</p></div>
+  <button class="btn alt" id="again">Play again 🔄</button></div>`);
+  confetti(["🎉", "⭐", "🐰", "🐒", "🐘", "🍎", "🌈"], 45);
+  $("#again").onclick = () => { S.sc = {}; run(); };
+}
+
+/* ---------- secuencia ---------- */
+function run() {
+  const steps = [welcome, colorScreen, startScreen, act1, game1, notice("Activity 1", "a1"), act2, game2, notice("Activity 2", "a2"), act3, game3, notice("Activity 3", "a3"), act4, notice("Activity 4", "a4"), finalScreen];
+  let i = 0;
+  const go = () => { $("#barfill").style.width = (i / (steps.length - 1) * 100) + "%"; const f = steps[i++]; f(go); };
+  go();
+}
+run();
+</script>
+</body>
+</html>
